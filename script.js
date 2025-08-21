@@ -227,7 +227,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- DATA FETCHING ---
     const loadPosts = async () => {
         try {
-            const response = await fetch(`${BASE_URL}/api/posts`);
+            // Replace with your actual Render URL
+            const response = await fetch('https://algomind-backend-sg3g.onrender.com/api/posts');
             if (!response.ok) throw new Error('Network response was not ok');
             state.posts = await response.json();
             renderPage();
@@ -274,3 +275,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
     init();
 });
+
