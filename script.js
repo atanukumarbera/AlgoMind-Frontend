@@ -1,6 +1,11 @@
 // script.js - Revamped and Ready for Deployment
 
 document.addEventListener('DOMContentLoaded', () => {
+
+    // --- CONFIGURATION ---
+    // Change this URL to your live backend URL on Render
+    const BASE_URL = 'https://algomind-backend-sg3g.onrender.com'; 
+
     // --- STATE & CONFIG ---
     const state = { currentPage: 'home', posts: [], filteredPosts: [], blogCurrentPage: 1, postsPerPage: 6 };
 
@@ -122,13 +127,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const renderSinglePostPage = (template, postId) => {
         const post = state.posts.find(p => p._id === postId);
         if (!post) { mainContent.innerHTML = '<p class="container">Post not found.</p>'; return; }
-
         template.getElementById('post-title').textContent = post.title;
         template.getElementById('post-author').textContent = `By ${post.author}`;
         template.getElementById('post-date').textContent = new Date(post.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
         template.getElementById('post-category').textContent = post.category;
         template.getElementById('post-content-full').innerHTML = post.content;
-
         const imageContainer = template.getElementById('post-image-container');
         if (post.imageUrl) {
             imageContainer.innerHTML = `<img src="${post.imageUrl}" alt="${post.title}">`;
@@ -152,76 +155,86 @@ document.addEventListener('DOMContentLoaded', () => {
         const socialMap = {
             linkedin: 'fa-brands fa-linkedin',
             github: 'fa-brands fa-github',
-            twitter: 'fa-brands fa-x-twitter', // New X logo
-            instagram: 'fa-brands fa-instagram',
+            twitter: 'fa-brands fa-square-x-twitter',
+            instagram: 'fa-brands fa-square-instagram'
         };
-        for (const [key, url] of Object.entries(config.social)) {
-            if (url && socialMap[key]) {
-                socialContainer.innerHTML += `<a href="${url}" target="_blank" aria-label="${key}"><i class="${socialMap[key]}"></i></a>`;
-            }
-        }
-        
-        const newsletterForm = document.getElementById('newsletter-form');
-        const newsletterFeedback = document.getElementById('newsletter-feedback');
-        newsletterForm.addEventListener('submit', e => {
-            e.preventDefault();
-            newsletterFeedback.textContent = "Thanks for subscribing!";
-            newsletterFeedback.style.color = 'green';
-            document.getElementById('newsletter-email').value = '';
-        });
+        socialContainer.innerHTML = Object.keys(config.social)
+            .filter(key => config.social[key])
+            .map(key => `<a href="${config.social[key]}" target="_blank" rel="noopener noreferrer" aria-label="${key}"><i class="${socialMap[key]}"></i></a>`)
+            .join('');
     };
 
-    // --- HELPER FUNCTIONS ---
     const createPostCard = (post) => {
-        const card = document.createElement('article');
+        const card = document.createElement('div');
         card.className = 'post-card';
         card.innerHTML = `
-            ${post.imageUrl ? `<div class="post-card-img"><img src="${post.imageUrl}" alt="${post.title}"></div>` : ''}
-            <div class="post-card-content">
-                <h3 class="post-card-title">${post.title}</h3>
-                <p class="post-card-excerpt">${post.excerpt}</p>
-                <a href="#post/${post._id}" class="post-card-link">Read More &rarr;</a>
-            </div>
+            <a href="#post/${post._id}" class="post-card-link">
+                <div class="post-card-image" style="background-image: url('${post.imageUrl || 'https://placehold.co/600x400/E5E7EB/4B5563?text=No+Image'}');"></div>
+                <div class="post-card-content">
+                    <span class="post-category">${post.category}</span>
+                    <h3>${post.title}</h3>
+                    <p>${post.excerpt}</p>
+                    <div class="post-card-meta">
+                        <span>By ${post.author}</span>
+                        <span>${new Date(post.date).toLocaleDateString()}</span>
+                    </div>
+                </div>
+            </a>
         `;
         return card;
     };
 
-    const renderSocialShare = (container, post) => {
-        const url = encodeURIComponent(window.location.href);
-        const text = encodeURIComponent(post.title);
-        container.innerHTML = `
-            <a href="https://twitter.com/intent/tweet?url=${url}&text=${text}" target="_blank" aria-label="Share on X"><i class="fa-brands fa-x-twitter"></i></a>
-            <a href="https://www.linkedin.com/shareArticle?mini=true&url=${url}&title=${text}" target="_blank" aria-label="Share on LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
-            <a href="https://www.facebook.com/sharer/sharer.php?u=${url}" target="_blank" aria-label="Share on Facebook"><i class="fa-brands fa-facebook"></i></a>
-        `;
-    };
-
-    // --- NAVIGATION & ROUTING ---
-    const navigate = (hash) => {
-        state.currentPage = hash.substring(1) || 'home';
-        window.scrollTo(0, 0);
-        renderPage();
-    };
-
     const updateActiveNavLink = () => {
-        const pageId = state.currentPage.split('/')[0];
-        navLinks.forEach(link => link.classList.toggle('active', link.getAttribute('href') === `#${pageId}`));
+        const [pageId] = state.currentPage.split('/');
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href').substring(1) === pageId) {
+                link.classList.add('active');
+            }
+        });
+    };
+
+    const renderSocialShare = (container, post) => {
+        const shareText = encodeURIComponent(`${post.title} by ${post.author}`);
+        const shareUrl = encodeURIComponent(window.location.href);
+        const shareButtons = [
+            { icon: 'fa-brands fa-facebook-f', href: `https://www.facebook.com/sharer/sharer.php?u=${shareUrl}` },
+            { icon: 'fa-brands fa-square-x-twitter', href: `https://twitter.com/intent/tweet?text=${shareText}&url=${shareUrl}` },
+            { icon: 'fa-brands fa-linkedin-in', href: `https://www.linkedin.com/shareArticle?mini=true&url=${shareUrl}&title=${shareText}` },
+            { icon: 'fa-solid fa-copy', href: `#`, action: 'copy' }
+        ];
+        container.innerHTML = shareButtons.map(btn => {
+            return `<a href="${btn.href}" ${btn.action !== 'copy' ? 'target="_blank" rel="noopener noreferrer"' : ''} class="share-btn" data-action="${btn.action || ''}"><i class="${btn.icon}"></i></a>`;
+        }).join('');
+
+        container.querySelectorAll('.share-btn[data-action="copy"]').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const tempInput = document.createElement('input');
+                tempInput.value = window.location.href;
+                document.body.appendChild(tempInput);
+                tempInput.select();
+                document.execCommand('copy');
+                document.body.removeChild(tempInput);
+                const originalIcon = btn.innerHTML;
+                btn.innerHTML = '<i class="fa-solid fa-check"></i>';
+                setTimeout(() => { btn.innerHTML = originalIcon; }, 2000);
+            });
+        });
     };
 
     // --- DATA FETCHING ---
-    async function loadPosts() {
+    const loadPosts = async () => {
         try {
-            // --- THIS IS THE UPDATED LINE ---
-            const response = await fetch('https://blog-backend-1-r9bw.onrender.com/api/posts');
-            
-            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            const response = await fetch(`${BASE_URL}/api/posts`);
+            if (!response.ok) throw new Error('Network response was not ok');
             state.posts = await response.json();
             renderPage();
         } catch (error) {
             console.error('Failed to fetch posts:', error);
             mainContent.innerHTML = `<p class="container" style="text-align:center; padding: 4rem 0;">Error loading blog posts. Please ensure the backend server is running and refresh the page.</p>`;
         }
-    }
+    };
 
     // --- INITIALIZATION ---
     const init = () => {
@@ -249,6 +262,13 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         loadPosts();
+        navigate(window.location.hash || '#home');
+    };
+
+    const navigate = (hash) => {
+        const [page, param] = hash.substring(1).split('/');
+        state.currentPage = param ? `${page}/${param}` : page;
+        renderPage();
     };
 
     init();
