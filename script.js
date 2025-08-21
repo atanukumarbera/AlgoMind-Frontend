@@ -1,10 +1,11 @@
-// script.js - Revamped and Ready for Deployment
+// script.js - Final Version for Netlify Deployment
 
 document.addEventListener('DOMContentLoaded', () => {
 
     // --- CONFIGURATION ---
-    // Change this URL to your live backend URL on Render
-    const BASE_URL = 'https://algomind-backend-sg3g.onrender.com'; 
+    // This is the public URL of your live backend on Render.
+    // Replace with your own URL after deploying to Render.
+    const BASE_URL = 'https://algomind-backend-sg3g.onrender.com';
 
     // --- STATE & CONFIG ---
     const state = { currentPage: 'home', posts: [], filteredPosts: [], blogCurrentPage: 1, postsPerPage: 6 };
