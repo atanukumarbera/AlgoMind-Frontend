@@ -168,11 +168,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const createPostCard = (post) => {
         const card = document.createElement('div');
         card.className = 'post-card';
+
+        // Use a placeholder image with a loading spinner while the actual image loads
+        const imageHtml = `
+            <div class="post-card-image">
+                <div class="image-loader"></div>
+                <img src="${post.imageUrl}" alt="${post.title}" style="display:none;" />
+            </div>
+        `;
+
         card.innerHTML = `
             <a href="#post/${post._id}" class="post-card-link">
-                <div class="post-card-image">
-                    <img src="${post.imageUrl || 'https://placehold.co/600x400/E5E7EB/4B5563?text=No+Image'}" alt="${post.title}" onerror="this.src='https://placehold.co/600x400/E5E7EB/4B5563?text=No+Image';">
-                </div>
+                ${imageHtml}
                 <div class="post-card-content">
                     <span class="post-category">${post.category}</span>
                     <h3>${post.title}</h3>
@@ -184,6 +191,33 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             </a>
         `;
+        
+        // Asynchronously load the image to handle redirects and errors
+        const imgElement = card.querySelector('img');
+        const loader = card.querySelector('.image-loader');
+        
+        const placeholderUrl = 'https://placehold.co/600x400/E5E7EB/4B5563?text=No+Image';
+
+        const loadImage = new Promise((resolve, reject) => {
+            const tempImg = new Image();
+            tempImg.onload = () => resolve(tempImg.src);
+            tempImg.onerror = () => reject(new Error('Image failed to load'));
+            tempImg.src = post.imageUrl;
+        });
+
+        loadImage
+            .then(src => {
+                imgElement.src = src;
+                imgElement.style.display = 'block';
+                loader.style.display = 'none';
+            })
+            .catch(error => {
+                imgElement.src = placeholderUrl;
+                imgElement.style.display = 'block';
+                loader.style.display = 'none';
+                console.error('Error loading image:', error);
+            });
+
         return card;
     };
 
