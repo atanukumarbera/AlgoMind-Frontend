@@ -165,25 +165,32 @@ document.addEventListener('DOMContentLoaded', () => {
             .join('');
     };
 
-    const createPostCard = (post) => {
-        const card = document.createElement('div');
-        card.className = 'post-card';
-        card.innerHTML = `
-            <a href="#post/${post._id}" class="post-card-link">
-                <div class="post-card-image" style="background-image: url('${post.imageUrl || 'https://placehold.co/600x400/E5E7EB/4B5563?text=No+Image'}');"></div>
-                <div class="post-card-content">
-                    <span class="post-category">${post.category}</span>
-                    <h3>${post.title}</h3>
-                    <p>${post.excerpt}</p>
-                    <div class="post-card-meta">
-                        <span>By ${post.author}</span>
-                        <span>${new Date(post.date).toLocaleDateString()}</span>
-                    </div>
+    // This function creates the HTML for a single blog post card.
+const createPostCard = (post) => {
+    const card = document.createElement('div');
+    card.className = 'post-card';
+    card.innerHTML = `
+        <a href="#post/${post._id}" class="post-card-link">
+            <!-- This is the corrected line. We remove the inline style attribute. -->
+            <div class="post-card-image">
+                <img src="${post.imageUrl || 'https://placehold.co/600x400/E5E7EB/4B5563?text=No+Image'}" alt="${post.title}">
+            </div>
+            <div class="post-card-content">
+                <span class="post-category">${post.category}</span>
+                <h3>${post.title}</h3>
+                <p>${post.excerpt}</p>
+                <div class="post-card-meta">
+                    <span>By ${post.author}</span>
+                    <span>${new Date(post.date).toLocaleDateString()}</span>
                 </div>
-            </a>
-        `;
-        return card;
-    };
+            </div>
+        </a>
+    `;
+    return card;
+};
+
+// ... the rest of the script.js file remains the same.
+
 
     const updateActiveNavLink = () => {
         const [pageId] = state.currentPage.split('/');
@@ -274,3 +281,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
     init();
 });
+
