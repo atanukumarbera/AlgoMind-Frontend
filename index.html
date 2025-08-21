@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AlgoMind</title>
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Lora:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for Icons (Includes new X logo) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+
+    <!-- Header Section -->
+    <header class="header">
+        <div class="container">
+            <nav class="main-nav">
+                <a href="#home" class="logo">AlgoMind</a>
+                <ul class="nav-links">
+                    <li><a href="#home" class="nav-link active">Home</a></li>
+                    <li><a href="#blog" class="nav-link">Blog</a></li>
+                    <li><a href="#about" class="nav-link">About</a></li>
+                    <li><a href="#contact" class="nav-link">Contact</a></li>
+                </ul>
+                <div class="nav-actions">
+                    <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle Dark Mode">
+                        <i class="fa-solid fa-moon"></i>
+                        <i class="fa-solid fa-sun"></i>
+                    </button>
+                    <button class="mobile-nav-toggle" aria-label="Open Menu"><i class="fa-solid fa-bars"></i></button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main id="main-content">
+        <!-- Pages will be dynamically injected here -->
+    </main>
+
+    <!-- Footer Section -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section about">
+                    <h4 class="logo">AlgoMind</h4>
+                    <p>A personal blog by Atanu Kumar Bera. Exploring the worlds of web development, technology, and design.</p>
+                     <div id="footer-social-links" class="social-links">
+                        <!-- Social links will be injected here -->
+                    </div>
+                </div>
+                <div class="footer-section links">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#blog">Blog</a></li>
+                        <li><a href="#about">About</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section newsletter">
+                    <h4>Subscribe for Updates</h4>
+                    <p>Get the latest posts and insights delivered to your inbox.</p>
+                    <form id="newsletter-form">
+                        <input type="email" id="newsletter-email" placeholder="Your Email Address" required>
+                        <button type="submit" aria-label="Subscribe"><i class="fa-solid fa-paper-plane"></i></button>
+                    </form>
+                    <div id="newsletter-feedback"></div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; <span id="current-year"></span> Atanu Kumar Bera. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Page Templates (hidden by default) -->
+    <template id="home-page-template">
+        <div id="home" class="page">
+            <section class="hero">
+                <div class="container hero-container">
+                    <div class="hero-text">
+                        <h1 id="hero-name"></h1>
+                        <p id="hero-tagline"></p>
+                        <p id="hero-bio"></p>
+                        <a href="#blog" class="btn btn-primary">Explore Posts</a>
+                    </div>
+                    <div id="hero-photo-container" class="hero-photo"></div>
+                </div>
+            </section>
+            <section class="recent-posts container">
+                <h2 class="section-title">Latest Articles</h2>
+                <div id="featured-posts-grid" class="posts-grid"></div>
+                 <div class="view-all-container">
+                    <a href="#blog" class="btn btn-secondary">View All Posts</a>
+                </div>
+            </section>
+        </div>
+    </template>
+
+    <template id="about-page-template">
+        <div id="about" class="page container">
+            <div class="about-header">
+                <h1 class="page-title">About Me</h1>
+                <p class="about-subtitle">A little bit about my journey, skills, and aspirations.</p>
+            </div>
+            <div class="about-content">
+                <div id="about-photo-container" class="about-photo"></div>
+                <div id="about-bio" class="about-bio"></div>
+            </div>
+            <div class="skills-section">
+                <h2 class="section-title">Core Competencies</h2>
+                <div id="skills-list" class="skills-list"></div>
+            </div>
+            <div class="resume-section">
+                 <a href="#" id="resume-link" class="btn btn-primary" download>Download Resume</a>
+            </div>
+        </div>
+    </template>
+
+    <template id="blog-page-template">
+        <div id="blog" class="page container">
+            <h1 class="page-title">The Archive</h1>
+            <p class="page-subtitle">Browse through all my articles and thoughts.</p>
+            <div class="blog-controls">
+                <input type="search" id="search-input" placeholder="Search articles...">
+                <select id="category-filter">
+                    <option value="all">All Categories</option>
+                </select>
+            </div>
+            <div id="blog-posts-grid" class="posts-grid"></div>
+            <div id="pagination-controls" class="pagination"></div>
+        </div>
+    </template>
+
+    <template id="single-post-page-template">
+        <div id="single-post" class="page container">
+            <article class="post-full">
+                 <div class="post-header-full">
+                    <p id="post-category" class="post-category-badge"></p>
+                    <h1 id="post-title" class="post-title-full"></h1>
+                    <div class="post-meta-full">
+                        <span id="post-author"></span> | <span id="post-date"></span>
+                    </div>
+                </div>
+                <div id="post-image-container" class="post-image-full"></div>
+                <div id="post-content-full" class="post-content-full"></div>
+                <div class="post-actions-full">
+                    <h4>Share this post</h4>
+                    <div id="social-share-buttons" class="social-share"></div>
+                </div>
+            </article>
+        </div>
+    </template>
+
+    <template id="contact-page-template">
+        <div id="contact" class="page container">
+            <h1 class="page-title">Get In Touch</h1>
+            <p class="page-subtitle">Have a project in mind or just want to say hello? I'd love to hear from you.</p>
+            <div class="contact-wrapper">
+                <form id="contact-form">
+                    <div class="form-group">
+                        <input type="text" id="name" name="name" required placeholder="Your Name">
+                    </div>
+                    <div class="form-group">
+                        <input type="email" id="email" name="email" required placeholder="Your Email">
+                    </div>
+                    <div class="form-group">
+                        <textarea id="message" name="message" rows="5" required placeholder="Your Message"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Send Message</button>
+                </form>
+                <div id="contact-feedback"></div>
+            </div>
+        </div>
+    </template>
+
+    <!-- Configuration and Main Script -->
+    <script src="config.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
