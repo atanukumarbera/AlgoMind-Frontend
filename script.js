@@ -170,7 +170,9 @@ document.addEventListener('DOMContentLoaded', () => {
         card.className = 'post-card';
         card.innerHTML = `
             <a href="#post/${post._id}" class="post-card-link">
-                <div class="post-card-image" style="background-image: url('${post.imageUrl || 'https://placehold.co/600x400/E5E7EB/4B5563?text=No+Image'}');"></div>
+                <div class="post-card-image">
+                    <img src="${post.imageUrl || 'https://placehold.co/600x400/E5E7EB/4B5563?text=No+Image'}" alt="${post.title}" onerror="this.src='https://placehold.co/600x400/E5E7EB/4B5563?text=No+Image';">
+                </div>
                 <div class="post-card-content">
                     <span class="post-category">${post.category}</span>
                     <h3>${post.title}</h3>
@@ -227,8 +229,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- DATA FETCHING ---
     const loadPosts = async () => {
         try {
-            // Replace with your actual Render URL
-            const response = await fetch('https://algomind-backend-sg3g.onrender.com/api/posts');
+            const response = await fetch(`${BASE_URL}/api/posts`);
             if (!response.ok) throw new Error('Network response was not ok');
             state.posts = await response.json();
             renderPage();
@@ -275,4 +276,3 @@ document.addEventListener('DOMContentLoaded', () => {
 
     init();
 });
-
