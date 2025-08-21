@@ -520,4 +520,44 @@ body.dark-mode .pagination button {
     background-color: var(--primary-color);
     border-color: var(--primary-color);
     color: #fff;
+
+}
+.post-card-image {
+    position: relative;
+    width: 100%;
+    padding-top: 50%; /* 2:1 Aspect Ratio */
+    background-color: #e5e7eb;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.post-card-image img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.image-loader {
+    border: 4px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 4px solid #3498db;
+    width: 40px;
+    height: 40px;
+    -webkit-animation: spin 2s linear infinite; /* Safari */
+    animation: spin 2s linear infinite;
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+    0% { -webkit-transform: rotate(0deg); }
+    100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
