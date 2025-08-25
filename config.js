@@ -21,7 +21,7 @@ const config = {
         // Your skills for the About page
         skills: ["HTML5", "CSS3", "JavaScript", "Node.js", "Express.js", "MongoDB", "React (Learning)"],
         // Link to your downloadable resume
-        resumeUrl: "https://wonderful-florentine-26514f.netlify.app/" // Replace with a link to your resume PDF
+        resumeUrl: "https://atanukumarbera.netlify.app/" // Replace with a link to your resume PDF
     },
     // Social media links (optional) - if you leave a value empty, the icon won't show
     social: {
@@ -30,4 +30,5 @@ const config = {
         twitter: "https://x.com/atanukumarbera",
         instagram: "https://www.instagram.com/atanukumarbera/"
     }
+
 };
